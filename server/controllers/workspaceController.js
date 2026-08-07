@@ -1,7 +1,6 @@
 import { prisma } from '../configs/prisma.js'
 import { randomUUID } from "crypto";
-import slugify from "slugify";
-
+import { slugify } from 'inngest';
 //get all workspace for user
 export const getUserWorkspace = async (req, res) => {
     try {
