@@ -76,7 +76,7 @@ const syncWorkspaceCreation = inngest.createFunction(
         await prisma.workspaceMember.create({
             data: {
                 userId: data.created_by,
-                WorkspaceId: data.id,
+                workspaceId: data.id,
                 role: "ADMIN"
             }
         })
