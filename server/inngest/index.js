@@ -46,7 +46,7 @@ const syncUserUpdation = inngest.createFunction(
                 id: data.id
             },
             data: {
-                email: data?.email?.[0]?.email,
+                email: data?.email_addresses[0].email_address,
                 name: `${data?.first_name ?? ''} ${data?.last_name ?? ''}`.trim(),
                 image: data?.image_url,
             }
