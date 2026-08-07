@@ -1,6 +1,6 @@
 import { configureStore } from '@reduxjs/toolkit'
-import workspaceReducer from '../features/workspaceSlice'
-import themeReducer from '../features/themeSlice'
+import workspaceReducer from '../features/workspaceSlice.js'
+import themeReducer from '../features/themeSlice.js'
 
 export const store = configureStore({
     reducer: {

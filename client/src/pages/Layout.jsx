@@ -5,24 +5,34 @@ import { Outlet } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
 import { loadTheme } from '../features/themeSlice'
 import { Loader2Icon } from 'lucide-react'
-import { useUser, SignIn} from '@clerk/react'
+import { useUser, SignIn, useAuth, CreateOrganization, useOrganization } from '@clerk/react'
+import { fetchWorkspaces } from '../features/workspaceSlice'
 
 const Layout = () => {
     const [isSidebarOpen, setIsSidebarOpen] = useState(false)
-    const { loading } = useSelector((state) => state.workspace)
+    const { loading, workspaces } = useSelector((state) => state.workspace)
     const dispatch = useDispatch()
 
-    const {user, isLoaded} = useUser();
+    const { user, isLoaded } = useUser();
+    const { getToken } = useAuth()
+    const { organization } = useOrganization()
 
     // Initial load of theme
     useEffect(() => {
         dispatch(loadTheme())
     }, [])
 
-    if(!user){
+    //Intial load of workspaces
+    useEffect(() => {
+        if (isLoaded && user) {
+            dispatch(fetchWorkspaces({ getToken }));
+        }
+    }, [dispatch, getToken, isLoaded, organization?.id, user])
+
+    if (!user) {
         return (
             <div className='flex justify-center items-center h-screen bg-white dark:bg-zinc-950' >
-                <SignIn/>
+                <SignIn />
             </div>
         )
     }
@@ -32,6 +42,18 @@ const Layout = () => {
             <Loader2Icon className="size-7 text-blue-500 animate-spin" />
         </div>
     )
+    console.log({
+        user,
+        workspaces,
+        length: workspaces.length,
+    });
+    if (user && workspaces.length === 0) {
+        return (
+            <div className='min-h-screen flex justify-center items-center'>
+                <CreateOrganization afterCreateOrganizationUrl="/" />
+            </div>
+        )
+    }
 
     return (
         <div className="flex bg-white dark:bg-zinc-950 text-gray-900 dark:text-slate-100">
