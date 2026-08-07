@@ -83,6 +83,8 @@ const syncWorkspaceCreation = inngest.createFunction(
     }
 )
 
+
+
 const syncWorkspaceUpdation = inngest.createFunction(
     {
         id: 'update-workspace-from-clerk',
