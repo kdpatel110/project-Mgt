@@ -1,5 +1,7 @@
 import { err } from "inngest/types";
-import { prisma } from "../configs/prisma";
+import { prisma } from "../configs/prisma.js";
+import sendEmail from "../configs/nodemailer.js";
+import { inngest } from "../inngest/index.js";
 
 //create task
 export const createTask = async (req, res) => {
@@ -37,6 +39,14 @@ export const createTask = async (req, res) => {
         const taskWithAssignee = await prisma.task.findUnique({
             where: { id: task.id },
             include: { assignee: true }
+        })
+
+        await inngest.send({
+            name: "app/task.assigned",
+            data: {
+                taskId: task.id,
+                origin
+            }
         })
 
         res.json({ task: taskWithAssignee, message: "Task created successfully" })
