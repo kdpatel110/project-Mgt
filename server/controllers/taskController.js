@@ -85,7 +85,7 @@ export const updateTask = async (req, res) => {
         }
 
         const updatedTask = await prisma.task.update({
-            where: {id: req.params.id},
+            where: { id: req.params.id },
             data: req.body
         })
 
@@ -102,13 +102,13 @@ export const updateTask = async (req, res) => {
 export const deleteTask = async (req, res) => {
     try {
         const { userId } = await req.auth();
-        const {taskIds} = req.body;
+        const { taskIds } = req.body;
         const tasks = await prisma.task.findMany({
-            where: {id: {in: taskIds}}
+            where: { id: { in: taskIds } }
         })
 
-        if(tasks.length === 0){
-            return res.status(404).json({message: "Task not found"});
+        if (tasks.length === 0) {
+            return res.status(404).json({ message: "Task not found" });
         }
 
 
@@ -126,10 +126,10 @@ export const deleteTask = async (req, res) => {
         }
 
         await prisma.task.deleteMany({
-            where: {id: {in: taskIds}}
+            where: { id: { in: taskIds } }
         })
 
-        res.json({message: "Task deleted successfully" })
+        res.json({ message: "Task deleted successfully" })
 
 
     } catch (error) {
@@ -137,3 +137,5 @@ export const deleteTask = async (req, res) => {
         res.status(500).json({ message: error.message || error.code });
     }
 }
+
+
