@@ -71,7 +71,7 @@ export const createProject = async (req, res) => {
             }
         })
 
-        res.json({ priority: projectWithMembers, message: "Project created successfully" })
+        res.json({ project: projectWithMembers, message: "Project created successfully" })
 
     } catch (error) {
         console.log(error);
@@ -83,7 +83,7 @@ export const createProject = async (req, res) => {
 export const updateProject = async (req, res) => {
     try {
         const { userId } = await req.auth();
-        const { workspaceId, description, name, status, start_date, end_date, team_members, team_lead, progress, priority } = req.body;
+        const { id, workspaceId, description, name, status, start_date, end_date, team_members, team_lead, progress, priority } = req.body;
 
         //check if user is admin
         const workspace = await prisma.workspace.findUnique({
@@ -103,7 +103,7 @@ export const updateProject = async (req, res) => {
             if (!project) {
                 return res.status(404).json({ message: "Project Not found" });
             } else if (project.team_lead !== userId) {
-                return res.status(403).json({ message: "You don't have permission ot create project in this workspace" });
+                return res.status(403).json({ message: "You don't have permission to update this project" });
             }
         }
 
